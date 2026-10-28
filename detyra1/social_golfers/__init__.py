@@ -1,0 +1,1 @@
+"""Social Golfers assignment package."""
