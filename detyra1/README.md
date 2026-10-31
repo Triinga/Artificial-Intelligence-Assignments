@@ -11,9 +11,10 @@ Source of truth: [official Detyra1.md](https://github.com/adrianymeri/Artificial
 - [x] Social Golfers – unit tests and small-instance tests
 - [x] Social Golfers – final 32-player/max-week verification
 - [x] Social Golfers – documentation and oral-defense notes
-- [ ] Sudoku – theory
-- [ ] Sudoku – implementation
-- [ ] Sudoku – Easy/Medium/Hard tests
+- [x] Sudoku – theory and pseudocode
+- [x] Sudoku – BFS + Backtracking implementation
+- [x] Sudoku – Easy/Medium/Hard tests
+- [x] Sudoku – documentation and oral-defense notes
 - [ ] Latin Square – theory
 - [ ] Latin Square – implementation
 - [ ] Search Tree – 8-Puzzle
