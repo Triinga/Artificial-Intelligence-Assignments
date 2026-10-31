@@ -15,8 +15,10 @@ Source of truth: [official Detyra1.md](https://github.com/adrianymeri/Artificial
 - [x] Sudoku – BFS + Backtracking implementation
 - [x] Sudoku – Easy/Medium/Hard tests
 - [x] Sudoku – documentation and oral-defense notes
-- [ ] Latin Square – theory
-- [ ] Latin Square – implementation
+- [x] Latin Square – theory and pseudocode
+- [x] Latin Square – IDDFS + Backtracking implementation
+- [x] Latin Square – tests for n=1, n=3 and n=5
+- [x] Latin Square – documentation and oral-defense notes
 - [ ] Search Tree – 8-Puzzle
 - [ ] Search Tree – Missionaries and Cannibals
 - [ ] Search Tree – Rotating Workforce Scheduling
