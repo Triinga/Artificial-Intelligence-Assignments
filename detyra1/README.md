@@ -19,9 +19,9 @@ Source of truth: [official Detyra1.md](https://github.com/adrianymeri/Artificial
 - [x] Latin Square – IDDFS + Backtracking implementation
 - [x] Latin Square – tests for n=1, n=3 and n=5
 - [x] Latin Square – documentation and oral-defense notes
-- [ ] Search Tree – 8-Puzzle
-- [ ] Search Tree – Missionaries and Cannibals
-- [ ] Search Tree – Rotating Workforce Scheduling
+- [x] Search Tree – 8-Puzzle
+- [x] Search Tree – Missionaries and Cannibals
+- [x] Search Tree – Rotating Workforce Scheduling
 - [ ] Complexity review
 - [ ] Final documentation
 - [ ] Oral-defense review
