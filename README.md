@@ -9,3 +9,11 @@ Official course material:
 ## Assignments
 
 - [Detyra 1 – Uninformed Search Techniques](detyra1/README.md)
+
+## Test
+
+From the repository root:
+
+```bash
+python -m unittest discover -s detyra1/tests -v
+```
