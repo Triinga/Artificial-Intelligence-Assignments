@@ -9,7 +9,8 @@ Source of truth: [official Detyra1.md](https://github.com/adrianymeri/Artificial
 - [x] Social Golfers – theory and pseudocode
 - [x] Social Golfers – core DFS + Backtracking implementation
 - [x] Social Golfers – unit tests and small-instance tests
-- [ ] Social Golfers – final 32-player/max-week verification
+- [x] Social Golfers – final 32-player/max-week verification
+- [x] Social Golfers – documentation and oral-defense notes
 - [ ] Sudoku – theory
 - [ ] Sudoku – implementation
 - [ ] Sudoku – Easy/Medium/Hard tests

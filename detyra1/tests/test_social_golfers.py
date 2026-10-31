@@ -2,6 +2,7 @@
 
 import unittest
 
+from detyra1.social_golfers.known_solution_8_4_10 import KNOWN_SOLUTION_8_4_10
 from detyra1.social_golfers.social_golfers import (
     solve_social_golfers,
     theoretical_week_upper_bound,
@@ -45,6 +46,11 @@ class SocialGolfersTests(unittest.TestCase):
 
     def test_assignment_upper_bound_is_ten(self) -> None:
         self.assertEqual(theoretical_week_upper_bound(8, 4), 10)
+
+    def test_known_ten_week_schedule_is_valid(self) -> None:
+        is_valid, message = validate_schedule(KNOWN_SOLUTION_8_4_10, 8, 4, 10)
+
+        self.assertTrue(is_valid, message)
 
     def test_validator_rejects_a_repeated_pair(self) -> None:
         invalid_schedule = [

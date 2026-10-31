@@ -1,53 +1,168 @@
-# Social Golfers – DFS with Backtracking
+# Social Golfers – DFS me Backtracking
 
-## Model
+## Përgjigjja
 
-For `g` groups, `p` players per group, and `w` weeks, the total number of
-players is `n = g * p`. Every player must appear exactly once per week and no
-pair of players may share a group more than once.
+Për 32 lojtarë, 8 grupe dhe 4 lojtarë në grup, maksimumi është **10 javë**.
 
-The DFS state contains:
+Çdo lojtar takohet me `p - 1 = 3` lojtarë të rinj në javë dhe ka vetëm 31
+lojtarë të tjerë:
 
-- the completed weeks;
-- the groups currently selected for this week;
-- the players still unassigned this week;
-- `used_pairs`, the pairs that have already played together.
+```text
+w * 3 <= 31
+w <= floor(31 / 3) = 10
+```
 
-## Important functions
+Orari i publikuar `8-4-10` kalon validator-in tonë, prandaj upper bound 10
+arrihet dhe është optimal.
 
-- `solve_social_golfers(...)` prepares the state and starts DFS.
-- `dfs_groups(...)` recursively adds one valid group at a time.
-- `theoretical_week_upper_bound(...)` calculates
-  `floor((n - 1) / (p - 1))` when `p > 1`.
-- `validate_schedule(...)` independently checks every solution constraint.
+## Modeli i problemit
 
-Backtracking happens inside `dfs_groups(...)`: when the recursive call fails,
-the last group and its pairs are removed before the next candidate is tried.
+Parametrat janë:
 
-## Run
+- `g`: numri i grupeve në javë;
+- `p`: numri i lojtarëve në grup;
+- `w`: numri i javëve;
+- `n = g * p`: numri total i lojtarëve.
 
-From the repository root:
+### State representation
+
+```text
+schedule[week][group] = lojtarët e grupit
+```
+
+State-i i DFS-it ruan edhe:
+
+- grupet e plotësuara;
+- lojtarët që kanë mbetur në javën aktuale;
+- `used_pairs`, çiftet që kanë luajtur tashmë bashkë.
+
+### Initial state
+
+Orari dhe `used_pairs` fillojnë bosh. Si symmetry breaking opsional, java e
+parë mund të fiksohet në grupe të njëpasnjëshme.
+
+### Goal state
+
+Goal arrihet kur janë plotësuar të gjitha `w` javët dhe asnjë constraint nuk
+është shkelur.
+
+## Variables dhe domain
+
+Formalisht, një variabël mund të shkruhet si `X[week, group, position]`.
+Vlera e saj tregon cili lojtar gjendet në atë pozitë.
+
+```text
+Domain = {0, 1, ..., n - 1}
+```
+
+Për rastin konkret domain është `{0, 1, ..., 31}`.
+
+## Constraints
+
+1. Çdo grup ka saktësisht `p` lojtarë.
+2. Çdo lojtar paraqitet saktësisht një herë në çdo javë.
+3. Çdo çift lojtarësh luan bashkë maksimumi një herë.
+
+Një grup me 4 lojtarë krijon `C(4, 2) = 6` çifte që kontrollohen në
+`used_pairs`.
+
+## Objective function
+
+Problemi origjinal kërkon:
+
+```text
+maximize w
+```
+
+duke respektuar të gjitha constraints. Për `g`, `p` dhe `w` të dhëna, DFS
+kërkon një schedule me zero shkelje.
+
+## Landscape / search space
+
+Për një javë, numri i ndarjeve të `n` lojtarëve në `g` grupe të parenditura
+me nga `p` lojtarë është:
+
+```text
+P = n! / ((p!)^g * g!)
+```
+
+Për `n=32`, `g=8`, `p=4`:
+
+```text
+P = 32! / ((4!)^8 * 8!) ≈ 5.94 * 10^19
+```
+
+Për `w` javë, raw search space është `P^w` para constraints. Search tree ka
+thellësi `d = g * w`, sepse kodi shton nga një grup në çdo nivel. Branching
+factor ndryshon sipas lojtarëve dhe çifteve që kanë mbetur.
+
+## DFS me Backtracking
+
+```text
+DFS(state):
+    nëse të gjitha javët janë plotësuar:
+        kthe SUCCESS
+
+    për çdo candidate group:
+        nëse ndonjë çift është përdorur:
+            vazhdo te grupi tjetër
+
+        shto grupin dhe çiftet e tij
+
+        nëse DFS(state) ka sukses:
+            kthe SUCCESS
+
+        largo grupin dhe çiftet e tij   <- backtracking
+
+    kthe FAILURE
+```
+
+DFS është i përshtatshëm sepse kërkon më pak memory se BFS dhe backtracking
+lejon zhbërjen e menjëhershme të një zgjedhjeje që çon në dead end.
+
+### Complexity
+
+- Time: `O(b^d)` në worst case.
+- Space: `O(d + n^2)` kur successors gjenerohen një nga një; `n^2` mbulon
+  ruajtjen e çifteve.
+
+## File-t
+
+- `social_golfers.py`: DFS, backtracking, validator dhe statistikat.
+- `known_solution_8_4_10.py`: orari optimal i publikuar, vetëm si test/dëshmi.
+- `verify_known_solution.py`: validon orarin 10-javor.
+- `../tests/test_social_golfers.py`: testet automatike.
+
+## Ekzekutimi
+
+Nga root-i i repository-t:
 
 ```bash
 python -m detyra1.social_golfers.social_golfers 2 2 3
+python -m detyra1.social_golfers.verify_known_solution
 python -m unittest discover -s detyra1/tests -v
 ```
 
-To make DFS search the first week instead of fixing a symmetric first week:
+Rasti `2-2-3` demonstron DFS. Rasti i njohur `8-4-10` demonstron se 10 javë
+janë të mundshme dhe valide. Nuk pretendojmë se orari i publikuar është
+gjeneruar nga DFS-i ynë.
 
-```bash
-python -m detyra1.social_golfers.social_golfers 2 3 2 --search-first-week
-```
+## MBROJTJA – çfarë duhet të di
 
-## Verified results
+1. **Pse ruajmë `used_pairs`?** Që të kontrollojmë shpejt nëse një çift është
+   takuar më herët.
+2. **Ku ndodh backtracking?** Kur recursive call dështon; grupi dhe çiftet e
+   tij largohen para provës tjetër.
+3. **Pse maksimumi është 10?** Një lojtar takon 3 të rinj në javë dhe ka vetëm
+   31 lojtarë të tjerë: `floor(31/3)=10`.
+4. **Çfarë është state?** Orari parcial, lojtarët e mbetur dhe `used_pairs`.
+5. **Çfarë është goal test?** Të gjitha javët janë plotësuar pa shkelje.
+6. **Pse DFS?** Ka memory të ulët dhe lidhet natyrshëm me backtracking.
+7. **Çfarë bën symmetry breaking?** Heq orare ekuivalente pa hequr zgjidhje
+   reale.
+8. **Sa është search space për një javë?**
+   `32! / ((4!)^8 * 8!) ≈ 5.94 * 10^19`.
 
-- `2 x 2 x 3`: valid schedule found.
-- `2 x 3 x 2`: correctly reported impossible; 20 backtracks when the first
-  week is searched.
-- `8 x 4 x 2` through `8 x 4 x 5`: valid schedules found and independently
-  validated.
-- `8 x 4`: theoretical upper bound is 10 weeks.
+## Burimi i orarit optimal
 
-Finding or disproving the full `8 x 4 x 10` instance is still pending. The
-current code is the clear core algorithm; any later optimization will be
-documented separately.
+Alejandro Aguado, [A 10 Days Solution to the Social Golfer Problem](https://www.mathpuzzle.com/MAA/54-Golf%20Tournaments/socgolf1.pdf).
