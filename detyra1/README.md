@@ -89,9 +89,9 @@ Ku `b` është branching factor dhe `d` është solution depth.
 - [x] Latin Square – IDDFS + Backtracking implementation
 - [x] Latin Square – tests for n=1, n=3 and n=5
 - [x] Latin Square – documentation and oral-defense notes
-- [x] Search Tree – 8-Puzzle
-- [x] Search Tree – Missionaries and Cannibals
-- [x] Search Tree – Rotating Workforce Scheduling
+- [x] Search Tree – 8-Puzzle, paper drawing verified and included
+- [x] Search Tree – Missionaries and Cannibals, paper drawing verified and included
+- [x] Search Tree – Rotating Workforce Scheduling, paper drawing verified and included
 - [x] Complexity review
 - [x] Final documentation
 - [ ] Oral-defense review

@@ -60,3 +60,9 @@ S0 --Down--> S1 --Right--> G
 - BFS shqyrton states sipas depth-it dhe gjen zgjidhjen më të shkurtër kur
   çdo move ka cost 1.
 - `visited` shmang cikle si kthimi Down pastaj Up.
+
+## Vizatimi në fletë
+
+![8-Puzzle Search Tree - page 1](images/eight_puzzle_page_1.png)
+
+![8-Puzzle Search Tree - page 2](images/eight_puzzle_page_2.png)

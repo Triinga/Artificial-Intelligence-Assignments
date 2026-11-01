@@ -69,3 +69,9 @@ Orari `G1`:
 
 Kjo është një Search Tree e vogël, por demonstron qartë branching, constraints,
 symmetry breaking dhe goal states.
+
+## Vizatimi në fletë
+
+![Rotating Workforce Search Tree - page 1](images/rotating_workforce_page_1.png)
+
+![Rotating Workforce Search Tree - page 2](images/rotating_workforce_page_2.png)

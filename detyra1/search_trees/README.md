@@ -8,6 +8,8 @@ validë dhe të deklaruar qartë.
 - [Missionaries and Cannibals](missionaries_cannibals.md)
 - [Rotating Workforce Scheduling](rotating_workforce.md)
 
-Pemët janë shkruar në formë që mund të kopjohen lehtë në fletë dhe pastaj të
-fotografohen. Një state i përsëritur shënohet `visited` dhe nuk zgjerohet
-përsëri.
+Për secilin problem ruhen si konstrukti tekstual, ashtu edhe fotografitë e
+pemës së vizatuar në fletë. Një state i përsëritur shënohet `visited` dhe nuk
+zgjerohet përsëri.
+
+Fotografitë finale gjenden në folderin [`images`](images/).

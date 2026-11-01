@@ -63,3 +63,9 @@ Një solution path me 11 kalime:
 
 Goal arrihet kur të gjithë janë në bregun e djathtë dhe barka është djathtas.
 Për çdo state kontrollohet siguria në të dy brigjet.
+
+## Vizatimi në fletë
+
+![Missionaries and Cannibals Search Tree - page 1](images/missionaries_cannibals_page_1.png)
+
+![Missionaries and Cannibals Search Tree - page 2](images/missionaries_cannibals_page_2.png)
