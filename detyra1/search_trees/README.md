@@ -15,9 +15,9 @@ Një state i përsëritur shënohet `visited` dhe nuk zgjerohet përsëri.
 - **Goal:** `1 2 3 / 4 5 6 / 7 8 0`
 - **Solution:** `S0 --Down--> S1 --Right--> G`, depth 2, path cost 2.
 
-![8-Puzzle Search Tree - page 1](images/eight_puzzle_page_1.png)
+![8-Puzzle Search Tree - page 1](images/eight_puzzle_page_1.jpg)
 
-![8-Puzzle Search Tree - page 2](images/eight_puzzle_page_2.png)
+![8-Puzzle Search Tree - page 2](images/eight_puzzle_page_2.jpg)
 
 ## 2. Missionaries and Cannibals
 
@@ -32,9 +32,9 @@ Një state i përsëritur shënohet `visited` dhe nuk zgjerohet përsëri.
 - **Solution:** 11 kalime:
   `2C→, 1C←, 2C→, 1C←, 2M→, 1M1C←, 2M→, 1C←, 2C→, 1M←, 1M1C→`.
 
-![Missionaries and Cannibals Search Tree - page 1](images/missionaries_cannibals_page_1.png)
+![Missionaries and Cannibals Search Tree - page 1](images/missionaries_cannibals_page_1.jpg)
 
-![Missionaries and Cannibals Search Tree - page 2](images/missionaries_cannibals_page_2.png)
+![Missionaries and Cannibals Search Tree - page 2](images/missionaries_cannibals_page_2.jpg)
 
 ## 3. Rotating Workforce Scheduling
 
@@ -49,9 +49,9 @@ Një state i përsëritur shënohet `visited` dhe nuk zgjerohet përsëri.
 - **Pema:** Day 2 ka vetëm dy mundësi valide, `(B,C,A)` dhe `(C,A,B)`; Day 3
   është i detyruar. Dy goals: `G1` dhe `G2`.
 
-![Rotating Workforce Search Tree - page 1](images/rotating_workforce_page_1.png)
+![Rotating Workforce Search Tree - page 1](images/rotating_workforce_page_1.jpg)
 
-![Rotating Workforce Search Tree - page 2](images/rotating_workforce_page_2.png)
+![Rotating Workforce Search Tree - page 2](images/rotating_workforce_page_2.jpg)
 
 **Lidhja me modelin real (Musliu).** Në RWS real, të gjithë punonjësit
 ndjekin të njëjtin orar ciklik, secili me një offset; ka demand për çdo
