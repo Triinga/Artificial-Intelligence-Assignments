@@ -116,8 +116,25 @@ def choose_empty_cell(board: Board) -> tuple[int, tuple[int, ...]] | None:
     return best
 
 
-def solve_sudoku_bfs(initial_board: Board) -> SearchResult:
-    """Solve a Sudoku using a FIFO queue and backtrack through parent links."""
+def choose_first_empty_cell(board: Board) -> tuple[int, tuple[int, ...]] | None:
+    """Choose the first empty cell in row order (no MRV)."""
+
+    for index, value in enumerate(board):
+        if value == 0:
+            return index, valid_values(board, index)
+    return None
+
+
+def solve_sudoku_bfs(initial_board: Board, use_mrv: bool = False) -> SearchResult:
+    """Solve a Sudoku using a FIFO queue and backtrack through parent links.
+
+    By default (plain BFS) the first empty cell is expanded. With
+    use_mrv=True the optional MRV optimization expands the cell with the
+    fewest valid values instead.
+
+    A dead-end state (an empty cell with no valid value) is simply discarded:
+    BFS continues with the next alternative already waiting in the queue.
+    """
 
     validate_initial_board(initial_board)
     started_at = perf_counter()
@@ -140,8 +157,14 @@ def solve_sudoku_bfs(initial_board: Board) -> SearchResult:
             stats.execution_time_seconds = perf_counter() - started_at
             return SearchResult(solution=current, path=path, stats=stats)
 
-        choice = choose_empty_cell(current)
+        if use_mrv:
+            choice = choose_empty_cell(current)
+        else:
+            choice = choose_first_empty_cell(current)
+
         if choice is None or not choice[1]:
+            # Dead end: this state is dropped. The next state in the queue
+            # is another alternative, so the search "goes back" to it.
             stats.dead_ends += 1
             continue
 
@@ -221,11 +244,18 @@ def main() -> None:
 
     parser = argparse.ArgumentParser(description="Solve Sudoku with BFS + Backtracking.")
     parser.add_argument("puzzle", type=Path, help="path to a Sudoku text file")
+    parser.add_argument(
+        "--mrv",
+        action="store_true",
+        help="optional optimization: expand the cell with the fewest valid values",
+    )
     args = parser.parse_args()
 
     initial_board = parse_puzzle(args.puzzle.read_text(encoding="utf-8"))
-    result = solve_sudoku_bfs(initial_board)
+    result = solve_sudoku_bfs(initial_board, use_mrv=args.mrv)
 
+    print(f"Cell selection: {'MRV' if args.mrv else 'first empty cell'}")
+    print(f"Givens: {81 - initial_board.count(0)}, empty cells: {initial_board.count(0)}")
     print("Initial board:")
     print(format_board(initial_board))
 

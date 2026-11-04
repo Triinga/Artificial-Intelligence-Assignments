@@ -37,6 +37,13 @@ class SearchResult:
 
     schedule: Schedule | None
     stats: SearchStats
+    # True when the search was stopped by the time limit. In that case
+    # schedule is None, but this does NOT prove that no schedule exists.
+    timed_out: bool = False
+
+
+class _TimeLimitReached(Exception):
+    """Raised inside DFS to stop the whole recursion when time runs out."""
 
 
 def theoretical_week_upper_bound(
@@ -63,6 +70,7 @@ def solve_social_golfers(
     weeks: int,
     *,
     fix_first_week: bool = True,
+    time_limit_seconds: float | None = None,
 ) -> SearchResult:
     """Find a valid schedule using depth-first search with backtracking.
 
@@ -71,9 +79,12 @@ def solve_social_golfers(
         players_per_group: Number of players in every group (p).
         weeks: Number of weeks requested (w).
         fix_first_week: Fix a canonical first week to remove symmetric states.
+        time_limit_seconds: Stop the search after this many seconds
+            (None means no limit).
 
     Returns:
-        SearchResult whose schedule is None when no solution exists.
+        SearchResult whose schedule is None when no solution exists or when
+        the time limit was reached (then timed_out is True).
     """
 
     _validate_dimensions(groups, players_per_group)
@@ -82,6 +93,7 @@ def solve_social_golfers(
 
     stats = SearchStats()
     started_at = perf_counter()
+    deadline = None if time_limit_seconds is None else started_at + time_limit_seconds
     player_count = groups * players_per_group
 
     upper_bound = theoretical_week_upper_bound(groups, players_per_group)
@@ -124,6 +136,9 @@ def solve_social_golfers(
         all pairs introduced by it are removed before the next group is tried.
         """
 
+        if deadline is not None and perf_counter() > deadline:
+            raise _TimeLimitReached
+
         stats.nodes_visited += 1
         depth = week_index * groups + len(current_week)
         stats.maximum_depth = max(stats.maximum_depth, depth)
@@ -165,9 +180,13 @@ def solve_social_golfers(
         return False
 
     first_week_to_search = len(schedule)
-    solved = dfs_week(first_week_to_search)
-    stats.execution_time_seconds = perf_counter() - started_at
+    try:
+        solved = dfs_week(first_week_to_search)
+    except _TimeLimitReached:
+        stats.execution_time_seconds = perf_counter() - started_at
+        return SearchResult(schedule=None, stats=stats, timed_out=True)
 
+    stats.execution_time_seconds = perf_counter() - started_at
     return SearchResult(schedule=schedule if solved else None, stats=stats)
 
 
@@ -243,6 +262,13 @@ def main() -> None:
         action="store_true",
         help="let DFS search the first week instead of fixing a symmetric one",
     )
+    parser.add_argument(
+        "--time-limit",
+        type=float,
+        default=None,
+        metavar="SECONDS",
+        help="stop the search after this many seconds",
+    )
     args = parser.parse_args()
 
     result = solve_social_golfers(
@@ -250,9 +276,15 @@ def main() -> None:
         args.players_per_group,
         args.weeks,
         fix_first_week=not args.search_first_week,
+        time_limit_seconds=args.time_limit,
     )
 
-    if result.schedule is None:
+    if result.timed_out:
+        print(
+            f"Time limit of {args.time_limit} seconds reached. "
+            "No schedule found yet (this does not prove that none exists)."
+        )
+    elif result.schedule is None:
         print("No valid schedule was found.")
     else:
         _print_schedule(result.schedule)
