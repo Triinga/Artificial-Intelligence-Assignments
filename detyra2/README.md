@@ -12,6 +12,8 @@ Kërkesat zyrtare: [Detyra2.md](https://github.com/adrianymeri/Artificial-Intell
 
 ## Përmbledhje e rezultateve
 
+Raporti i plotë: [REPORT.md](REPORT.md).
+
 **1. Blocked N-Queens (A\*).**
 * Heuristikat: h1 = N − g, h2 = h1 + zbulim i rreshtave pa dalje, h3 = penalizim MRV (jo-admissible).
 * **h4** (e propozuar) = propagim i rreshtave të detyruar + matching rreshta–kolona. Është e vërtetuar
