@@ -1,0 +1,22 @@
+# Killer Sudoku – Medium, nga https://sudoku.com/killer (screenshot, 21.11.2026)
+abccddeef
+abggddehf
+iijgkdllm
+nnopqqrrm
+ssopttrmm
+uoovvvrwx
+uuyyyzzwx
+AABCCzDEE
+FFBGCCDHH
+...41..7.
+581.6.4..
+...9.85..
+1.5..2.8.
+........7
+.2...96.3
+69...78..
+8.....7..
+.........
+a 7  b 14  c 13  d 23  e 14  f 17  g 17  h 2  i 11  j 3  k 2
+l 11  m 17  n 4  o 21  p 14  q 9  r 25  s 13  t 4  u 22  v 18
+w 4  x 5  y 10  z 21  A 9  B 9  C 24  D 8  E 9  F 8  G 2  H 15

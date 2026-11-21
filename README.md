@@ -10,6 +10,7 @@ Materiali dhe kërkesat zyrtare të lëndës:
 | Detyra | Tema | Dokumentimi |
 |---|---|---|
 | Detyra 1 | Uninformed Search Techniques | [detyra1/README.md](detyra1/README.md) |
+| Detyra 2 | Informed Search (A*), SAT, CSP, Metaheuristika | [detyra2/README.md](detyra2/README.md) |
 
 ### Detyra 1 – përmbajtja
 
@@ -20,13 +21,23 @@ Materiali dhe kërkesat zyrtare të lëndës:
 | Latin Square | IDDFS me Backtracking | [latin_square](detyra1/latin_square/README.md) |
 | 8-Puzzle, Missionaries and Cannibals, Rotating Workforce Scheduling | Search Trees (të vizatuara në letër) | [search_trees](detyra1/search_trees/README.md) |
 
+### Detyra 2 – përmbajtja
+
+| Problemi | Teknika | Dokumentimi |
+|---|---|---|
+| Blocked N-Queens | A* me heuristikat h1–h4 (h4 admissible, e propozuar) | [01_blocked_nqueens_astar](detyra2/01_blocked_nqueens_astar/README.md) |
+| Ulja e 100 mysafirëve | Formulë SAT (PySAT) | [02_sat_wedding_seating](detyra2/02_sat_wedding_seating/README.md) |
+| Killer Sudoku | CSP (solver nga zero + OR-Tools CP-SAT) | [03_killer_sudoku_csp](detyra2/03_killer_sudoku_csp/README.md) |
+| Torso Decompositions | Metaheuristika (në Kaggle) | – |
+
 Për çdo problem dokumentimi përmban modelin, reprezentimin (variablat,
 domain), objective function, landscape, algoritmin dhe rezultatet e matura.
 
 ## Kërkesat
 
 - Python 3.10 ose më i ri
-- Nuk përdoren external libraries
+- Detyra 1: nuk përdoren external libraries
+- Detyra 2: `pip install -r detyra2/requirements.txt` (python-sat, ortools)
 
 ## Ekzekutimi
 
@@ -54,13 +65,19 @@ Komandat e tjera dhe opsionet (`--time-limit`, `--mrv`, `--dfs`) janë te
 ```text
 .
 |-- README.md
-`-- detyra1/
+|-- detyra1/
+|   |-- README.md
+|   |-- social_golfers/
+|   |-- sudoku/
+|   |   `-- examples/
+|   |-- latin_square/
+|   |-- search_trees/
+|   |   `-- images/
+|   `-- tests/
+`-- detyra2/
     |-- README.md
-    |-- social_golfers/
-    |-- sudoku/
-    |   `-- examples/
-    |-- latin_square/
-    |-- search_trees/
-    |   `-- images/
-    `-- tests/
+    |-- requirements.txt
+    |-- 01_blocked_nqueens_astar/
+    |-- 02_sat_wedding_seating/
+    `-- 03_killer_sudoku_csp/
 ```
