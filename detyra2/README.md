@@ -8,7 +8,7 @@ Kërkesat zyrtare: [Detyra2.md](https://github.com/adrianymeri/Artificial-Intell
 | 1 | Blocked N-Queens | A* + 3 heuristika + heuristikë admissible e propozuar | [01_blocked_nqueens_astar](01_blocked_nqueens_astar/README.md) |
 | 2 | Ulja e 100 mysafirëve | Formulë SAT (PySAT / CaDiCaL) | [02_sat_wedding_seating](02_sat_wedding_seating/README.md) |
 | 3 | Killer Sudoku | Constraint Programming: solver CSP nga zero + OR-Tools CP-SAT | [03_killer_sudoku_csp](03_killer_sudoku_csp/README.md) |
-| 4 | Torso Decompositions (ESA SpOC-3) | Metaheuristika (do të bëhet në Kaggle, sipas rekomandimit të profesorit) | – |
+| 4 | Torso Decompositions (ESA SpOC-3) | Metaheuristika: Simulated Annealing + Iterated Local Search (ekzekutuar në Kaggle) | [04_torso_decomposition_local_search](04_torso_decomposition_local_search/README.md) |
 
 ## Përmbledhje e rezultateve
 
@@ -38,14 +38,25 @@ Raporti i plotë: [REPORT.md](REPORT.md).
 * CP-SAT i zgjidh 4 puzzle-t nga sudoku.com (easy–expert) me 0 degëzime dhe vërteton se zgjidhjet
   janë unike.
 
+**4. Torso Decompositions (ESA SpOC-3).**
+* Vlerësimi është implementuar sipas README-s zyrtare dhe validuar me shembullin zyrtar (madhësi 4,
+  gjerësi 2). Përdoren bitset-e, me rreth 2–4 ms për vlerësim.
+* Zgjidhjet fillestare: min-degree dhe min-fill. Metaheuristikat: **SA** dhe **ILS** me lëvizje
+  swap/insert lokale dhe mbi nyjet kritike.
+* Ekzekutimi u bë në **Kaggle**: 12 × 900 s.
+* Hypervolume i normalizuar i frontit me 20 pika: easy 0.961 → **0.973**, medium 0.498 → **0.639**,
+  hard 0.109 → **0.631**.
+* Skedarët e dorëzimit janë në formatin zyrtar të ESA-s.
+
 ## Instalimi dhe ekzekutimi
 
 ```bash
-pip install -r detyra2/requirements.txt      # python-sat, ortools (Python 3.10+)
+pip install -r detyra2/requirements.txt      # python-sat, ortools, matplotlib (Python 3.10+)
 
 cd detyra2/01_blocked_nqueens_astar && python solve.py instances/example_page.lp
 cd detyra2/02_sat_wedding_seating   && python solve.py instances/sat_party
 cd detyra2/03_killer_sudoku_csp     && python solve.py puzzles/expert.txt
+cd detyra2/04_torso_decomposition_local_search && python run.py --seconds 30
 ```
 
 Secili folder ka `run_experiments.py` (tabelat në `results/`) dhe teste

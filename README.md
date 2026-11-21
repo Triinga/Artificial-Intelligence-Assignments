@@ -28,7 +28,7 @@ Materiali dhe kërkesat zyrtare të lëndës:
 | Blocked N-Queens | A* me heuristikat h1–h4 (h4 admissible, e propozuar) | [01_blocked_nqueens_astar](detyra2/01_blocked_nqueens_astar/README.md) |
 | Ulja e 100 mysafirëve | Formulë SAT (PySAT) | [02_sat_wedding_seating](detyra2/02_sat_wedding_seating/README.md) |
 | Killer Sudoku | CSP (solver nga zero + OR-Tools CP-SAT) | [03_killer_sudoku_csp](detyra2/03_killer_sudoku_csp/README.md) |
-| Torso Decompositions | Metaheuristika (në Kaggle) | – |
+| Torso Decompositions (ESA SpOC-3) | Simulated Annealing + Iterated Local Search (Kaggle) | [04_torso_decomposition_local_search](detyra2/04_torso_decomposition_local_search/README.md) |
 
 Për çdo problem dokumentimi përmban modelin, reprezentimin (variablat,
 domain), objective function, landscape, algoritmin dhe rezultatet e matura.
@@ -37,7 +37,7 @@ domain), objective function, landscape, algoritmin dhe rezultatet e matura.
 
 - Python 3.10 ose më i ri
 - Detyra 1: nuk përdoren external libraries
-- Detyra 2: `pip install -r detyra2/requirements.txt` (python-sat, ortools)
+- Detyra 2: `pip install -r detyra2/requirements.txt` (python-sat, ortools, matplotlib)
 
 ## Ekzekutimi
 
@@ -79,5 +79,6 @@ Komandat e tjera dhe opsionet (`--time-limit`, `--mrv`, `--dfs`) janë te
     |-- requirements.txt
     |-- 01_blocked_nqueens_astar/
     |-- 02_sat_wedding_seating/
-    `-- 03_killer_sudoku_csp/
+    |-- 03_killer_sudoku_csp/
+    `-- 04_torso_decomposition_local_search/
 ```

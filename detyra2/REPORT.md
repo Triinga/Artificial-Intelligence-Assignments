@@ -15,9 +15,9 @@ Detyra përbëhet nga katër probleme, secili me një teknikë tjetër të Intel
 | 1 | Blocked N-Queens | Kërkim i informuar – A* me heuristika |
 | 2 | Ulja e 100 mysafirëve në 10 tavolina | Satisfiability (SAT) |
 | 3 | Killer Sudoku | Constraint Programming (CSP) |
-| 4 | Torso Decompositions (ESA SpOC-3) | Metaheuristika – sipas rekomandimit të profesorit do të realizohet në Kaggle |
+| 4 | Torso Decompositions (ESA SpOC-3) | Metaheuristika (SA, ILS) – ekzekutuar në Kaggle sipas rekomandimit të profesorit |
 
-Ky raport përfshin problemet 1–3. Të gjitha zgjidhjet janë në Python 3 dhe mund të riprodhohen me një
+Të gjitha zgjidhjet janë në Python 3 dhe mund të riprodhohen me një
 komandë për problem. Kodi, instancat, testet dhe tabelat e plota janë në folderët përkatës.
 
 ---
@@ -212,13 +212,87 @@ dhe secili ka **zgjidhje unike** (e vërtetuar me CP-SAT). Të gjitha zgjidhjet 
 
 ---
 
-## 5. Përfundime të përgjithshme
+## 5. Problemi 4 – Torso Decompositions (ESA SpOC-3) me metaheuristika
+
+### 5.1 Problemi
+
+Burimi është README-ja zyrtare në [github.com/esa/SpOC3](https://github.com/esa/SpOC3). Faqja e
+platformës ngarkohet me JavaScript.
+
+* **Hyrja:** graf i lidhur me nyje 0..n−1.
+* **Vektori i vendimit:** `x = [p₁..pₙ, t]` (permutacion + prag).
+* Brinjët orientohen sipas permutacionit. Skanohet nga e majta në të djathtë dhe fqinjët dalës të çdo
+  nyjeje bëhen klikë (brinjë të reja).
+* **Torso** = n − t nyjet e fundit. **Gjerësia** = outdegree maksimal në torso.
+* **Objektivat:** madhësia ↑ dhe gjerësia ↓. Dorëzohen ≤ 20 vektorë dhe cilësia matet me
+  **hypervolume**.
+
+| Instanca | Nyje | Brinjë |
+|---|---|---|
+| easy (`small-graph`) | 1 357 | 2 280 |
+| medium (`medium-graph`) | 1 399 | 13 799 |
+| hard (`large-graph`) | 2 426 | 253 895 |
+
+### 5.2 Vlerësimi
+
+Kodi zyrtar i vlerësimit nuk është publik. Prandaj u implementua sipas përkufizimit dhe u validua:
+* shembulli zyrtar jep madhësi 4 dhe gjerësi 2 ✓;
+* në 200 grafe të rastësishme përputhet me simulimin fjalë për fjalë të procedurës ✓.
+
+Procedura është "loja e eliminimit" dhe zbatohet me bitset-e: rreth 2–4 ms për vlerësim edhe për hard,
+me përditësim inkremental pas lëvizjeve. Një permutacion jep menjëherë një front të tërë, sepse
+w(t) = max_{i≥t} outdeg(i).
+
+Hypervolume llogaritet në (t, gjerësia) me pikë reference **(n, 501)**. Ky është supozimi ynë,
+bazuar në rregullin që gjerësia mbi 500 = 501.
+
+### 5.3 Algoritmet
+
+* **Konstruktive:** min-degree, min-fill (renditje eliminimi për treewidth).
+* **Objektivi:** HV(π) = Σ_t (501 − w_π(t)), pra HV i frontit të plotë të permutacionit. Pikat
+  jo-dominuese ruhen në arkiv.
+* **Lëvizjet:**
+  * swap/insert brenda një dritareje |i − j| ≤ 30 (50%);
+  * zhvendosje e nyjeve kritike, ato që e përcaktojnë gjerësinë (30%);
+  * lëvizje krejt të rastit (20%).
+* **Simulated Annealing:** T₀ kalibrohet si mesatarja e |Δ| të përkeqësimeve; ftohje gjeometrike sipas
+  kohës.
+* **Iterated Local Search:** hill climbing me lëvizje anësore, perturbim me 8 lëvizje, pranim nëse
+  zgjidhja s'është më e keqe se më e mira.
+* **Fronti final:** bashkimi i arkivave dhe zgjedhja optimale e ≤ 20 pikave me programim dinamik.
+  Çdo vektor rivlerësohet para dorëzimit.
+
+### 5.4 Eksperimentet (Kaggle, 4 CPU, 12 ekzekutime × 900 s, 2 seed)
+
+| Instanca | Konstruktive më e mirë (HV i norm.) | SA + ILS, fronti final | Më i miri i SA (staircase) | Më i miri i ILS (staircase) |
+|---|---|---|---|---|
+| easy | 0.9605 | **0.9726** | 660 648 | 660 040 |
+| medium | 0.4979 | **0.6385** | 424 996 | 442 927 |
+| hard | 0.1091 | **0.6311** | 773 624 | 781 455 |
+
+Grafikët e konvergjencës dhe të fronteve Pareto janë në
+`04_torso_decomposition_local_search/results/`.
+
+### 5.5 Përfundime
+
+* Metaheuristikat e përmirësojnë shumë frontin konstruktiv në grafet e dendura. Te hard, torsoja me
+  1 554 nyje ka gjerësi 173, kurse me min-degree gjerësia ishte ≈ 500. HV-ja rritet 5.8 herë.
+* **ILS është më i qëndrueshëm se SA**: te hard dy seed-et e tij japin 781 455 dhe 774 736, kurse ato
+  të SA japin 773 624 dhe 663 501. Peizazhi ka rrafshina të gjata (shumica e lëvizjeve s'e ndryshojnë
+  gjerësinë maksimale). Kjo e arsyeton fqinjësinë mbi nyjet kritike dhe lëvizjet anësore.
+* Bashkimi i ekzekutimeve jep front më të mirë se çdo ekzekutim i veçantë. Me më shumë kohë fronti do
+  të përmirësohej edhe më, sepse kurbat ende rriten në fund.
+
+---
+
+## 6. Përfundime të përgjithshme
 
 * **Informata e domenit vendos efikasitetin.** Te të tri problemet fitimi më i madh nuk erdhi nga
   algoritmi i kërkimit, por nga njohuria specifike për problemin:
   * matching-u te N-Queens;
   * thyerja e simetrisë te SAT;
-  * kombinimet e kafazeve te Killer Sudoku.
+  * kombinimet e kafazeve te Killer Sudoku;
+  * renditjet min-degree / min-fill dhe lëvizjet mbi nyjet kritike te Torso Decompositions.
 * **Zbulimi i hershëm i dështimit** (h = ∞, forward checking, unit propagation) është ideja e
   përbashkët. Kur të gjitha zgjidhjet kanë të njëjtën kosto, kjo është e vetmja mënyrë që një
   heuristikë ta ndihmojë A\*-n.
@@ -231,7 +305,7 @@ dhe secili ka **zgjidhje unike** (e vërtetuar me CP-SAT). Të gjitha zgjidhjet 
 
 ---
 
-## 6. Referencat
+## 7. Referencat
 
 1. S. Russell, P. Norvig – *Artificial Intelligence: A Modern Approach*, bot. 4, Pearson, 2020 (kap. 3: A\*, admissibility dhe konsistenca; kap. 6: CSP, forward checking, MRV).
 2. ASP Competition 2009 – Blocked N-Queens, KU Leuven: <https://dtai.cs.kuleuven.be/events/ASP-competition/Benchmarks/BlockedQueens.shtml>
@@ -241,3 +315,8 @@ dhe secili ka **zgjidhje unike** (e vërtetuar me CP-SAT). Të gjitha zgjidhjet 
 6. Google OR-Tools, CP-SAT solver: <https://developers.google.com/optimization>
 7. Killer Sudoku: <https://sudoku.com/killer>
 8. H. W. Kuhn – *The Hungarian Method for the Assignment Problem*, Naval Research Logistics Quarterly, 1955 (matching bipartit).
+9. ESA Advanced Concepts Team – *SpOC 3, Challenge 1: Torso Decompositions*, GECCO 2024: <https://github.com/esa/SpOC3>
+10. D. J. Rose, R. E. Tarjan, G. S. Lueker – *Algorithmic Aspects of Vertex Elimination on Graphs*, SIAM J. Computing 5(2), 1976.
+11. S. Kirkpatrick, C. D. Gelatt, M. P. Vecchi – *Optimization by Simulated Annealing*, Science 220, 1983.
+12. H. R. Lourenço, O. C. Martin, T. Stützle – *Iterated Local Search*, në *Handbook of Metaheuristics*, Springer, 2003.
+13. E. Zitzler, L. Thiele – *Multiobjective Evolutionary Algorithms: A Comparative Case Study and the Strength Pareto Approach*, IEEE TEC 3(4), 1999 (hypervolume).
